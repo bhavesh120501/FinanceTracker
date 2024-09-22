@@ -1,5 +1,6 @@
 import { useUser } from '@clerk/clerk-react';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { FinancialRecordContext } from '../../contexts/FinancialRecordContext';
 
 export const FinancialRecordForm = () => {
   const [description, setDescription] = useState("");
@@ -7,20 +8,27 @@ export const FinancialRecordForm = () => {
   const [category, setCategory] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
 
+  const {addRecord} = useContext(FinancialRecordContext);
+
   const {user} = useUser();
 
   const handleOnSubmit = (e) =>{
     e.preventDefault();
 
     const newRecord = {
-      userId: user?.id ?? "",
+      userId: user?.id || "",
       date: new Date(),
       description: description,
       amount: parseFloat(amount),
       category: category,
       paymentMethod: paymentMethod,      
     }
-
+    if (!newRecord.userId) {
+      console.error("User ID is missing!");
+      return;
+    } else {
+      addRecord(newRecord);
+    }
     setDescription("");
     setAmount("");
     setCategory("");
