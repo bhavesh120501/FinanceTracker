@@ -27,12 +27,12 @@ router.post('/',async(req,res)=>{
     }
 })
 
-router.put('/:userId',async(req,res)=>{
+router.put('/:id',async(req,res)=>{
     try {
-        const userId = req.params.userId;
+        const userId = req.params.id;
         const newRecordBody = req.body;
         const record = await FinancialRecordModel.findByIdAndUpdate(
-            userId,
+            id,
             newRecordBody,
             {new:true}
         )
@@ -45,10 +45,10 @@ router.put('/:userId',async(req,res)=>{
     }
 })
 
-router.delete('/:userId',async(req,res)=>{
+router.delete('/:id',async(req,res)=>{
     try {
-        const userId = req.params.userId;
-        const record = await FinancialRecordModel.findByIdAndDelete(userId)
+        const userId = req.params.id;
+        const record = await FinancialRecordModel.findByIdAndDelete(id)
         if(!record){
             res.status(404).send();
         }

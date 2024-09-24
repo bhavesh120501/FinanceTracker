@@ -1,9 +1,25 @@
-import { createContext, useState } from "react";
+import { useUser } from "@clerk/clerk-react";
+import { createContext, useEffect, useState } from "react";
 
 export const FinancialRecordContext = createContext();
 
 export const FinancialRecordProvider = ({children}) => {
     const [records,setRecords] = useState([]);
+    const {user} = useUser();
+
+    const fetchRecord = async () =>{
+        if(!user) return;
+        const response = await fetch(`http://localhost:3001/financialRecord/getAllUsersById/${user.id}`);
+        if(response.ok){
+            const records = await response.json();
+            console.log(records);
+            setRecords(records);
+        }
+    }
+
+    useEffect(()=>{
+        fetchRecord();
+    },[user]);
 
     const addRecord = async(record) => {
         const res = await fetch("http://localhost:3001/financialRecord",{
