@@ -40,8 +40,45 @@ export const FinancialRecordProvider = ({children}) => {
         }
     }    
 
+    const updateRecord = async(id,newRecord) =>{
+        const res = await fetch(`http://localhost:3001/financialRecord/${id}`,{
+            method:'PUT',
+            body:JSON.stringify(newRecord),
+            headers:{
+                "Content-Type":'application/json'
+            }
+        });
+        try {
+            if(res.ok){
+                const newRecord = await res.json();
+                setRecords((prev)=>prev.map((record)=>{
+                    if(record._id === id){//id coming from FinancialRecordList 
+                        return newRecord;
+                    }
+                    else{
+                        return record;
+                    }
+                }));
+            }
+        } catch (error) {
+        }
+    }
+
+    const deleteRecord = async(id) =>{
+        const res = await fetch(`http://localhost:3001/financialRecord/${id}`,{
+            method:'DELETE',
+        });
+        try {
+            const deletedRecord = await res.json();
+            setRecords((prev)=>prev.filter((record)=>
+                record._id !== deletedRecord._id
+            ));
+        } catch (error) {
+        }
+    }
+
     return (
-      <FinancialRecordContext.Provider value={{ addRecord , records }}>
+      <FinancialRecordContext.Provider value={{ addRecord , records , updateRecord, deleteRecord}}>
         {children}
       </FinancialRecordContext.Provider>
     ); 
