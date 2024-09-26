@@ -3,6 +3,7 @@ import {useUser} from '@clerk/clerk-react'
 import { FinancialRecordForm } from './FinancialRecordForm';
 import { FinancialRecordList } from './FinancialRecordList';
 import { FinancialRecordContext } from '../../contexts/FinancialRecordContext';
+import './FinancialRecord.css'
 
 export const Dashboard = () => {
     const{user} = useUser();
